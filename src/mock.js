@@ -1,3 +1,5 @@
+import kuphiScreenshot from './asset/kuphi-screenshot.png';
+
 export const portfolioData = {
   profile: {
     name: "Arya Garda Perwira",
@@ -81,9 +83,9 @@ export const portfolioData = {
       githubUrl: "https://github.com/aryagarda28/kuphi-ecommerce", // ganti jika ada repo khusus
       rating: 5,
       ratingCount: 10,
-      image: "https://i.ibb.co/6bQwQwF/kuphi-coffee-ss.png", // ganti dengan screenshot jika ada
+      image: kuphiScreenshot,
       images: [
-        "https://i.ibb.co/6bQwQwF/kuphi-coffee-ss.png"
+        kuphiScreenshot
       ]
     }
   ],
