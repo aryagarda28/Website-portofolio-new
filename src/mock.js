@@ -105,7 +105,7 @@ export const portfolioData = {
     },
     {
       id: 2,
-      name: "Supervisor Pushidrosal",
+      name: "KADISPERS PUSHIDROSAL",
       role: "System Administrator", 
       company: "TNI Angkatan Laut",
       rating: 4,
