@@ -1,4 +1,6 @@
 import kuphiScreenshot from './asset/kuphi-screenshot.png';
+import kuphiMenuPrice from './asset/kuphi-menu-price.jpg';
+import kuphiSweetBliss from './asset/kuphi-sweet-bliss.jpg';
 
 export const portfolioData = {
   profile: {
@@ -85,7 +87,9 @@ export const portfolioData = {
       ratingCount: 10,
       image: kuphiScreenshot,
       images: [
-        kuphiScreenshot
+        kuphiScreenshot,
+        kuphiMenuPrice,
+        kuphiSweetBliss
       ]
     }
   ],
