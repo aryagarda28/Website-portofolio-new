@@ -1,4 +1,5 @@
 // File: backend/index.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
@@ -282,6 +283,7 @@ migrate()
     });
   })
   .catch(err => {
-    console.error('[migrate] Gagal:', err.message);
+    console.error('[migrate] Gagal:', err.message || err);
+    console.error('[migrate] Detail error:', err.code, err.errno, err.sqlState);
     process.exit(1);
   });
