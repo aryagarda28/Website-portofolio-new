@@ -204,6 +204,84 @@ app.delete('/api/certificates/:id', verifyToken, requireAdmin, async (req, res) 
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
-});
+// ─── AUTO MIGRATE & START ────────────────────────────────────────────────────
+async function migrate() {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS admins (
+      id INT NOT NULL AUTO_INCREMENT,
+      username VARCHAR(50) NOT NULL,
+      email VARCHAR(100) DEFAULT NULL,
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      UNIQUE KEY username (username)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT NOT NULL AUTO_INCREMENT,
+      username VARCHAR(50) NOT NULL,
+      email VARCHAR(100) DEFAULT NULL,
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      UNIQUE KEY username (username)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS portfolio (
+      id INT NOT NULL AUTO_INCREMENT,
+      title VARCHAR(100) DEFAULT NULL,
+      description TEXT DEFAULT NULL,
+      image VARCHAR(255) DEFAULT NULL,
+      link VARCHAR(255) DEFAULT NULL,
+      PRIMARY KEY (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS certificates (
+      id INT NOT NULL AUTO_INCREMENT,
+      title VARCHAR(100) DEFAULT NULL,
+      issuer VARCHAR(100) DEFAULT NULL,
+      date DATE DEFAULT NULL,
+      file VARCHAR(255) DEFAULT NULL,
+      description TEXT DEFAULT NULL,
+      PRIMARY KEY (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS comments (
+      id INT NOT NULL AUTO_INCREMENT,
+      portfolio_id INT NOT NULL,
+      user_id INT NOT NULL,
+      username VARCHAR(50) NOT NULL,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+
+  // Buat admin default jika belum ada
+  const [admins] = await db.query('SELECT id FROM admins WHERE username = ?', ['aryagarda28']);
+  if (admins.length === 0) {
+    const hash = await bcrypt.hash('admin123', 10);
+    await db.query(
+      'INSERT INTO admins (username, email, password) VALUES (?, ?, ?)',
+      ['aryagarda28', 'aryagarda11@gmail.com', hash]
+    );
+    console.log('[migrate] Admin aryagarda28 dibuat (password: admin123)');
+  }
+
+  console.log('[migrate] Database siap');
+}
+
+migrate()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Backend server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('[migrate] Gagal:', err.message);
+    process.exit(1);
+  });
