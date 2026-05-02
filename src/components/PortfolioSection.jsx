@@ -13,7 +13,7 @@ function ProjectCard({ project, onOpenModal, isAdmin, isLoggedIn }) {
 
   const fetchComments = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/${project.id}/comments`);
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/portfolio/${project.id}/comments`);
       const data = await res.json();
       setComments(Array.isArray(data) ? data : []);
     } catch {
@@ -36,7 +36,7 @@ function ProjectCard({ project, onOpenModal, isAdmin, isLoggedIn }) {
     setCommentError('');
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/portfolio/${project.id}/comments`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/portfolio/${project.id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: commentText }),
@@ -56,7 +56,7 @@ function ProjectCard({ project, onOpenModal, isAdmin, isLoggedIn }) {
     if (!window.confirm('Hapus komentar ini?')) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/comments/${commentId}`, {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -204,7 +204,7 @@ const PortfolioSection = ({ portfolio }) => {
 
   const fetchModalComments = useCallback(async (portfolioId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/${portfolioId}/comments`);
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/portfolio/${portfolioId}/comments`);
       const data = await res.json();
       setModalComments(Array.isArray(data) ? data : []);
     } catch {
@@ -228,7 +228,7 @@ const PortfolioSection = ({ portfolio }) => {
     setModalCommentError('');
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/portfolio/${selectedProject.id}/comments`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/portfolio/${selectedProject.id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: modalCommentText }),
@@ -248,7 +248,7 @@ const PortfolioSection = ({ portfolio }) => {
     if (!window.confirm('Hapus komentar ini?')) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/comments/${commentId}`, {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

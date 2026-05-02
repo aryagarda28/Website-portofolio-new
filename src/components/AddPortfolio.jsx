@@ -38,7 +38,7 @@ const AddPortfolio = () => {
       let imageData = null;
       if (image) imageData = await fileToBase64(image);
 
-      const res = await fetch("http://localhost:5000/api/portfolio", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/portfolio`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -39,7 +39,7 @@ const AddSertifikat = () => {
       let fileData = null;
       if (file) fileData = await fileToBase64(file);
 
-      const res = await fetch("http://localhost:5000/api/certificates", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/certificates`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
